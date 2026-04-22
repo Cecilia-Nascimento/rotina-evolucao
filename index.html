@@ -69,24 +69,24 @@ h1,h2,h3,h4{font-family:'Outfit',sans-serif}
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .cal-nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;cursor:pointer;font-size:13px;font-weight:500}
 .cal-nav-btn:hover{background:#f3f4f6}
-.cal-wrap{max-width:360px}
-.cal-grid{display:grid;grid-template-columns:repeat(7,40px);gap:3px;margin-bottom:20px;width:fit-content}
-.cal-day-label{width:40px;text-align:center;font-size:10px;font-weight:700;color:var(--text2);padding:6px 0;text-transform:uppercase}
-.cal-day{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif;flex-direction:column;line-height:1}
+.cal-wrap{width:100%}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:20px;width:100%}
+.cal-day-label{text-align:center;font-size:10px;font-weight:700;color:var(--text2);padding:6px 0;text-transform:uppercase}
+.cal-day{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif;flex-direction:column;line-height:1;min-width:0}
 .cal-day:hover{background:#f3f4f6}
 .cal-day.today{background:var(--c-study);color:#fff;font-weight:700}
 .cal-day.live-class{background:var(--c-live-l);color:#b45309;font-weight:700;border:1.5px solid #FFB347}
 .cal-day.live-att{background:var(--c-goal-l);color:#27500A;font-weight:700;border:1.5px solid var(--c-goal)}
 .cal-day.empty{cursor:default}
 .live-list{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
-.live-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);transition:background .15s}
+.live-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);transition:background .15s}
 .live-item:last-child{border-bottom:none}
-.live-date{font-weight:700;font-size:13px;font-family:'Outfit',sans-serif;width:80px;flex-shrink:0}
-.live-info{flex:1;display:flex;flex-direction:column;gap:2px}
-.live-label{font-size:12px;color:var(--text2)}
-.live-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.live-status{font-size:11px;padding:4px 12px;border-radius:99px;font-weight:600;white-space:nowrap}
-.live-check-btn{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;flex-shrink:0}
+.live-date{font-weight:700;font-size:13px;font-family:'Outfit',sans-serif;width:54px;flex-shrink:0}
+.live-info{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.live-label{font-size:11px;color:var(--text2)}
+.live-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.live-status{font-size:11px;padding:3px 8px;border-radius:99px;font-weight:600;white-space:nowrap}
+.live-check-btn{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;flex-shrink:0;font-family:"Outfit",sans-serif}
 .phase-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px}
 .phase-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:18px}
 .phase-card .phase-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:3px 8px;border-radius:99px;margin-bottom:10px;display:inline-block}
@@ -373,13 +373,20 @@ h1,h2,h3,h4{font-family:'Outfit',sans-serif}
     <div style="font-family:'Outfit';font-weight:700;font-size:16px" id="cal-title"></div>
     <button class="cal-nav-btn" onclick="changeMonth(1)">Próximo →</button>
   </div>
-  <div style="display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:start">
+  <div id="cal-layout" style="display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:24px;align-items:start">
     <div class="cal-wrap"><div id="cal-grid-container"></div></div>
     <div>
       <div class="section-title">Todas as aulas ao vivo</div>
       <div class="live-list" id="live-list"></div>
     </div>
   </div>
+  <style>
+    @media(max-width:600px){
+      #cal-layout{grid-template-columns:1fr!important}
+      .live-status{display:none}
+      .live-check-btn{width:26px;height:26px;font-size:12px}
+    }
+  </style>
 </div>
 
 <div id="page-estudos" class="page">

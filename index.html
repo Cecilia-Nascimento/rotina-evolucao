@@ -689,7 +689,15 @@ function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch 
 
 // ══ STATE ════════════════════════════════════════════════
 let state = { checklist:{}, studies:[], treinos:[], terapias:[], phoneLog:{}, moods:[], goals:{estudos:[],treinos:[],terapia:[],geral:[]}, projects:[], evolution:{} };
-function initState() { ['checklist','studies','treinos','terapias','phoneLog','moods','goals','projects','evolution'].forEach(k => { state[k] = lsLoad(k, state[k]); }); }
+function initState() {
+  ['checklist','studies','treinos','terapias','phoneLog','moods','goals','projects','evolution'].forEach(k => {
+    state[k] = lsLoad(k, state[k]);
+  });
+  // guarantee all goal categories always exist
+  ['estudos','treinos','terapia','geral'].forEach(cat => {
+    if(!state.goals[cat]) state.goals[cat] = [];
+  });
+}
 
 // ══ NAV ══════════════════════════════════════════════════
 function nav(p) {
@@ -1153,7 +1161,10 @@ function addGoal(c){
   const inp=document.getElementById('gi-'+c);
   const dateInp=document.getElementById('gd-'+c);
   if(!inp.value.trim())return;
-  if(!state.goals[c])state.goals[c]=[];
+  // ensure all categories exist before saving to avoid overwriting others
+  ['estudos','treinos','terapia','geral'].forEach(cat=>{
+    if(!state.goals[cat])state.goals[cat]=[];
+  });
   state.goals[c].push({text:inp.value.trim(),done:false,archived:false,deadline:dateInp.value||null,reflection:''});
   inp.value='';dateInp.value='';
   save('goals',state.goals);renderMetas();

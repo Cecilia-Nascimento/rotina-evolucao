@@ -35,6 +35,12 @@ Registro de todas as evoluções do projeto ao longo da pós-graduação em Enge
 - Subtítulo de identidade do projeto no dashboard
 - Botão "Configurar" do sync bar visível no modo escuro
 
+## [0.5.0] — 09/05/2026
+
+### 🐛 Correções
+- Corrigida sobreposição da barra de progresso no mobile
+- Ajuste completo do layout mobile com margin-top no nav e barra compacta
+
 ---
 
 ## [0.1.0] — início do projeto

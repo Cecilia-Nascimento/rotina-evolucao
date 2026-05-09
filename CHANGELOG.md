@@ -41,6 +41,13 @@ Registro de todas as evoluções do projeto ao longo da pós-graduação em Enge
 - Corrigida sobreposição da barra de progresso no mobile
 - Ajuste completo do layout mobile com margin-top no nav e barra compacta
 
+## [0.6.0] — 09/05/2026
+
+### 🐛 Correções
+- Reflexão do mês agora tem botão Salvar e Editar — texto não some mais ao limpar a caixa
+- Removida duplicação da frase de reflexão na linha do tempo
+- Foto do mês exibe imagem completa sem corte com altura aumentada
+
 ---
 
 ## [0.1.0] — início do projeto

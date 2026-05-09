@@ -25,6 +25,16 @@ Registro de todas as evoluções do projeto ao longo da pós-graduação em Enge
 - Corrigido contador de tópicos concluídos no dashboard que mostrava 0 de 4
 - Corrigido total de tópicos por fase que usava contagem dinâmica em vez do valor fixo
 
+## [0.4.0] — 09/05/2026
+
+### ✨ Melhorias
+- Frases motivacionais expandidas de 10 para 25, todas no tom da jornada
+- Sorteio diário de frase com memória — não troca ao recarregar a página
+- Modo escuro completo com memória de sessão
+- Projeto renomeado para Pipeline.me
+- Subtítulo de identidade do projeto no dashboard
+- Botão "Configurar" do sync bar visível no modo escuro
+
 ---
 
 ## [0.1.0] — início do projeto

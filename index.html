@@ -215,7 +215,13 @@ h1,h2,h3,h4{font-family:'Outfit',sans-serif}
 .steps code{background:#e5e7eb;padding:1px 5px;border-radius:4px;font-family:monospace;font-size:11px}
 .mbtn-row{display:flex;gap:8px;margin-top:12px}
 
-@media(max-width:700px){.sidebar{display:none}.main{padding:16px}.mobile-nav{display:flex!important}#sync-bar{bottom:8px;right:8px;left:8px;min-width:unset}}
+@media(max-width:700px){
+  .sidebar{display:none}
+  .main{padding:16px;padding-top:16px}
+  .mobile-nav{display:flex!important;margin-top:40px}
+  #sync-bar{bottom:8px;right:8px;left:8px;min-width:unset}
+  #pos-bar{padding:4px 12px}
+}
 .mobile-nav{display:none;overflow-x:auto;gap:8px;padding:0 0 12px;margin-bottom:16px}
 .mobile-nav-btn{white-space:nowrap;padding:6px 14px;border-radius:99px;border:1.5px solid var(--border);background:var(--surface);font-size:12px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif}
 .mobile-nav-btn.active{background:var(--c-study);color:#fff;border-color:var(--c-study)}

@@ -762,7 +762,34 @@ const FRASES=[
   'Você já fez isso antes. Você vai fazer de novo. Continua.',
   'Cada módulo concluído é uma porta aberta que ninguém pode fechar.',
   'Engenharia de dados começa com dados reais — e você está vivendo um.',
+  'Uma linha de código por dia já é mais do que zero.',
+  'Você está construindo algo que vai durar além do diploma.',
+  'Cansaço de hoje é orgulho de amanhã.',
+  'Dados não mentem — e os seus mostram que você está evoluindo.',
+  'Cada sessão de estudo é um investimento que ninguém pode te tirar.',
+  'A versão de você daqui a um ano vai agradecer a de hoje.',
+  'Não é sobre ser a melhor da turma — é sobre ser melhor do que ontem.',
+  'Sua jornada tem nome, data e história. Isso é raro.',
+  'Engenharia de dados é sobre transformar caos em clareza — assim como sua rotina.',
+  'O diploma é a consequência. A jornada é o que forma quem você é.',
+  'Cada dado registrado aqui é prova de que você não desistiu.',
+  'Foco não é fazer tudo — é fazer o que importa, todos os dias.',
+  'Você criou uma rotina do zero. Isso já é engenharia.',
+  'Estudar cansada ainda é estudar. Conta sim.',
+  'A consistência de hoje é o portfólio de amanhã.',
 ];
+function getFraseDoDia(){
+  const today=new Date().toISOString().slice(0,10);
+  const saved=localStorage.getItem('frase_dia');
+  if(saved){
+    const parsed=JSON.parse(saved);
+    if(parsed.date===today)return parsed.frase;
+  }
+  const idx=Math.floor(Math.random()*FRASES.length);
+  const frase=FRASES[idx];
+  localStorage.setItem('frase_dia',JSON.stringify({date:today,frase}));
+  return frase;
+}
 
 // ══ DASHBOARD ════════════════════════════════════════════
 let dashView='week';
@@ -788,7 +815,7 @@ function renderDash() {
 
   // ── frase do dia ──
   const fraseEl=document.getElementById('frase-texto');
-  if(fraseEl){const idx=new Date().getDay()%FRASES.length;fraseEl.textContent=FRASES[idx];}
+  if(fraseEl)fraseEl.textContent=getFraseDoDia();
 
   // ── próxima aula ao vivo ──
   const now=new Date();

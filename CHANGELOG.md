@@ -14,6 +14,17 @@ Registro de todas as evoluções do projeto ao longo da pós-graduação em Enge
 - Saudação personalizada: "Bem-vinda de volta, Cecília 💜"
 - Subtítulo da sidebar personalizado com nome e curso
 
+## [0.3.0] — 09/05/2026
+
+### ✨ Melhorias
+- Foto de perfil clicável na sidebar com recorte circular e alta qualidade
+- Barra de progresso da pós-graduação fixada no topo da página
+- Ajuste de espaçamento da sidebar e conteúdo principal
+
+### 🐛 Correções
+- Corrigido contador de tópicos concluídos no dashboard que mostrava 0 de 4
+- Corrigido total de tópicos por fase que usava contagem dinâmica em vez do valor fixo
+
 ---
 
 ## [0.1.0] — início do projeto

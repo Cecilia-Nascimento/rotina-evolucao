@@ -21,8 +21,8 @@
 body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
 h1,h2,h3,h4{font-family:'Outfit',sans-serif}
 .app{display:flex;min-height:100vh}
-.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);padding:20px 0;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
-.main{flex:1;padding:24px;overflow-x:hidden;min-width:0}
+.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);padding:20px 0;padding-top:48px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.main{flex:1;padding:24px;padding-top:56px;overflow-x:hidden;min-width:0}
 .logo{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:16px}
 .logo h1{font-size:15px;font-weight:800;background:linear-gradient(135deg,var(--c-study),var(--c-phone));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .logo p{font-size:11px;color:var(--text2);margin-top:2px}
@@ -213,6 +213,15 @@ h1,h2,h3,h4{font-family:'Outfit',sans-serif}
 </head>
 <body>
 
+<!-- BARRA DE PROGRESSO DA PÓS -->
+<div id="pos-bar" style="position:fixed;top:0;left:0;right:0;z-index:998;background:var(--surface);border-bottom:1px solid var(--border);padding:6px 24px;display:flex;align-items:center;gap:12px">
+  <span style="font-size:10px;font-weight:700;color:var(--text2);white-space:nowrap;text-transform:uppercase;letter-spacing:.06em">🎓 Pós-graduação</span>
+  <div style="flex:1;height:6px;background:#f0f0f5;border-radius:99px;overflow:hidden">
+    <div id="pos-bar-fill" style="height:100%;background:linear-gradient(90deg,var(--c-study),var(--c-phone));border-radius:99px;transition:width .6s ease;width:0%"></div>
+  </div>
+  <span id="pos-bar-label" style="font-size:10px;font-weight:700;color:var(--c-study);white-space:nowrap">0%</span>
+</div>
+
 <!-- SYNC BAR -->
 <div id="sync-bar">
   <div id="sync-dot"></div>
@@ -246,7 +255,19 @@ h1,h2,h3,h4{font-family:'Outfit',sans-serif}
 
 <div class="app">
 <nav class="sidebar">
-  <div class="logo"><h1>Rotina &amp; Evolução</h1><p>Cecília · Eng. de Dados 💜</p></div>
+  <div class="logo">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <div id="sidebar-avatar" onclick="document.getElementById('avatar-input').click()" style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--c-study),var(--c-phone));display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0;overflow:hidden;border:2px solid var(--border)" title="Clique para adicionar sua foto">
+      <span id="avatar-emoji">👩‍💻</span>
+      <img id="avatar-img" style="display:none;width:100%;height:100%;object-fit:cover">
+    </div>
+    <div>
+      <h1>Rotina &amp; Evolução</h1>
+      <p>Cecília · Eng. de Dados 💜</p>
+    </div>
+  </div>
+  <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="saveAvatar(this)">
+</div>
   <div class="nav-label">Principal</div>
   <div class="nav-item active" onclick="nav('dashboard')"><span class="nav-dot" style="background:var(--c-study)"></span>Dashboard</div>
   <div class="nav-item" onclick="nav('checklist')"><span class="nav-dot" style="background:var(--c-live)"></span>Checklist Semanal</div>
@@ -793,8 +814,9 @@ function renderDash() {
   const phTopics=state.goals['phase_'+faseAtual.phaseIdx]?undefined:undefined;
   // calc phase topic completion
   let phDone=0,phTotal=0;
-  const phKeys=Object.keys(state.goals).filter(k=>k.startsWith('phase_'+faseAtual.phaseIdx+'_'));
-  phTotal=phKeys.length||4;
+  const phKeys=Object.keys(state.goals).filter(k=>k.startsWith('phase_phase_'+faseAtual.phaseIdx+'_'));
+  const faseDef=PH[faseAtual.phaseIdx];
+  phTotal=faseDef?faseDef.topics.length:4;
   phDone=phKeys.filter(k=>state.goals[k]).length;
   const phPct=phTotal>0?Math.round(phDone/phTotal*100):0;
   document.getElementById('fase-nome').textContent=faseAtual.nome;
@@ -1542,8 +1564,58 @@ function launchUnlockCelebration(){
   setTimeout(()=>overlay.remove(),8000);
 }
 
+// ══ AVATAR ═══════════════════════════════════════════════
+function saveAvatar(input){
+  const file=input.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      const size=200;
+      canvas.width=size; canvas.height=size;
+      const ctx=canvas.getContext('2d');
+      ctx.beginPath();
+      ctx.arc(size/2,size/2,size/2,0,Math.PI*2);
+      ctx.clip();
+      const scale=Math.max(size/img.width,size/img.height);
+      const w=img.width*scale, h=img.height*scale;
+      ctx.drawImage(img,(size-w)/2,(size-h)/2,w,h);
+      localStorage.setItem('avatar',canvas.toDataURL('image/jpeg',0.95));
+      loadAvatar();
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ══ BARRA PROGRESSO PÓS ══════════════════════════════════
+function updatePosBar(){
+  const start=new Date('2026-04-01');
+  const end=new Date('2027-03-31');
+  const now=new Date();
+  const total=end-start;
+  const elapsed=Math.min(Math.max(now-start,0),total);
+  const pct=Math.round(elapsed/total*100);
+  const fill=document.getElementById('pos-bar-fill');
+  const label=document.getElementById('pos-bar-label');
+  if(fill)fill.style.width=pct+'%';
+  if(label)label.textContent=pct+'%';
+}
+
+function loadAvatar(){
+  const av=localStorage.getItem('avatar');
+  if(av){
+    document.getElementById('avatar-emoji').style.display='none';
+    const img=document.getElementById('avatar-img');
+    img.src=av; img.style.display='block';
+  }
+}
+
 // ══ INIT ═════════════════════════════════════════════════
 initState();
+loadAvatar();
+updatePosBar();
 renderDash();
 window.addEventListener('load', () => {
   setTimeout(() => { if (CLIENT_ID && typeof google !== 'undefined') connectDrive(); else if (CLIENT_ID) setSync('error', 'Aguardando Google SDK...'); }, 1500);

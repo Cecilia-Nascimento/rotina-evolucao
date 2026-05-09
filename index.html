@@ -1454,11 +1454,17 @@ function renderEvolucao(){
           ${d.treinos>0?`<span style="font-size:11px;background:var(--c-train-l);color:var(--c-train);padding:2px 8px;border-radius:99px">💪 ${d.treinos} treinos</span>`:''}
           ${d.terapias>0?`<span style="font-size:11px;background:var(--c-therapy-l);color:var(--c-therapy);padding:2px 8px;border-radius:99px">🧠 ${d.terapias} sessões</span>`:''}
           ${d.humorMedio!=='—'?`<span style="font-size:11px;background:var(--c-mood-l);color:var(--c-mood);padding:2px 8px;border-radius:99px">${d.humorMedio}</span>`:''}
-        </div>
-        ${evo.conquistas?`<div style="font-size:12px;color:var(--text2);font-style:italic;line-height:1.5">🏆 ${evo.conquistas}</div>`:''}
+        </div>   
         <div style="margin-top:10px">
-          <label style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">Reflexão do mês</label>
-          <textarea style="width:100%;background:#f9f9ff;border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;font-family:'Outfit',sans-serif;resize:none;height:48px;outline:none" placeholder="O que esse mês significou..." oninput="sEvo('${evoKey}','conquistas',this.value)">${evo.conquistas||''}</textarea>
+          ${evo.conquistas?'':`<label style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">Reflexão do mês</label>`}
+          ${evo.conquistas
+            ? `<div style="font-size:12px;color:var(--text);line-height:1.6;font-style:italic;background:var(--bg);border-radius:8px;padding:8px 10px;border:1px solid var(--border);margin-bottom:6px">🏆 ${evo.conquistas}</div>
+               <button onclick="editEvo('${evoKey}')" style="font-size:11px;padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-family:'Outfit',sans-serif;font-weight:600;color:var(--text2)">✏️ Editar</button>`
+            : `<div style="display:flex;gap:6px;align-items:flex-start">
+                 <textarea id="ta-${evoKey}" style="flex:1;background:#f9f9ff;border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;font-family:'Outfit',sans-serif;resize:none;height:64px;outline:none" placeholder="O que esse mês significou..."></textarea>
+                 <button onclick="saveEvo('${evoKey}')" style="padding:6px 12px;border-radius:8px;border:none;background:var(--c-study);color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap">Salvar</button>
+               </div>`
+          }
           <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
             <label style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">Nota</label>
             <input type="range" min="1" max="10" value="${evo.nota||5}" style="flex:1;accent-color:var(--c-study)" oninput="sEvo('${evoKey}','nota',this.value);this.nextElementSibling.textContent=this.value+'/10'">
@@ -1467,7 +1473,7 @@ function renderEvolucao(){
           <div style="margin-top:8px">
             <label style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">📷 Foto do mês</label>
             <input type="file" accept="image/*" onchange="saveMesPhoto('${evoKey}',this)" style="font-size:11px;width:100%">
-            ${evo.foto?`<img src="${evo.foto}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:6px">`:''}
+            ${evo.foto?`<img src="${evo.foto}" style="width:100%;max-height:220px;object-fit:contain;border-radius:8px;margin-top:6px;background:#000">`:''}
           </div>
         </div>
       </div>
@@ -1547,6 +1553,26 @@ function renderEvolucao(){
       </div>
     </div>`;
   }).join('');
+}
+
+function saveEvo(k){
+  const ta=document.getElementById('ta-'+k);
+  if(!ta||!ta.value.trim())return alert('Escreva sua reflexão antes de salvar.');
+  if(!state.evolution[k])state.evolution[k]={};
+  state.evolution[k]['conquistas']=ta.value.trim();
+  save('evolution',state.evolution);
+  renderEvolucao();
+}
+function editEvo(k){
+  if(!state.evolution[k])return;
+  const val=state.evolution[k]['conquistas']||'';
+  delete state.evolution[k]['conquistas'];
+  save('evolution',state.evolution);
+  renderEvolucao();
+  setTimeout(()=>{
+    const ta=document.getElementById('ta-'+k);
+    if(ta)ta.value=val;
+  },50);
 }
 
 function sEvo(k,f,v){

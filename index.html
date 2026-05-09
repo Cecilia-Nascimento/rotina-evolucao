@@ -853,6 +853,8 @@ function renderDash() {
   let streak=0; const d2=new Date();
   for(let i=0;i<60;i++){const k=d2.toISOString().slice(0,10);if((state.checklist[k]||[]).length>0)streak++;else if(i>0)break;d2.setDate(d2.getDate()-1);}
   document.getElementById('d-streak').textContent = streak;
+  const streakCard=document.getElementById('d-streak')?.closest('.stat-card');
+  if(streakCard){const sub=streakCard.querySelector('.sub');if(sub)sub.textContent='dias consecutivos';}
 
   // ── meta circular ──
   const metaMins=dashView==='week'?360:1440;
@@ -1482,7 +1484,11 @@ function renderEvolucao(){
 
 function sEvo(k,f,v){
   if(!state.evolution[k])state.evolution[k]={};
-  state.evolution[k][f]=v;
+  if(v===''||v===null||v===undefined){
+    delete state.evolution[k][f];
+  } else {
+    state.evolution[k][f]=v;
+  }
   save('evolution',state.evolution);
 }
 
